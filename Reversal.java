@@ -41,8 +41,7 @@ public class Reversal {
         //System.out.println(revFile);
         //System.out.println(finalString);
            
-        //return "0";
-        //filename.close();
+        file_name.close();
         input.close();
 
 	}
