@@ -1,20 +1,18 @@
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 public class Reversal {
-
-    public static void main(String[] args) throws FileNotFoundException {
-    	
-        ArrayList<String> revFile = new ArrayList<String>();
-        
-        Scanner file_name = new Scanner(System.in);
-        String filename = file_name.next();
-        Scanner input = new Scanner(new File(filename));
-        
-        while (input.hasNextLine()){
-        	revFile.add(input.nextLine()); 
+	
+	public static void reverseFile(File input, File output) throws FileNotFoundException {
+		Scanner fileScanner = new Scanner(input);
+		PrintWriter pw = new PrintWriter(output);
+		ArrayList<String> revFile = new ArrayList<String>();
+		
+		while (fileScanner.hasNextLine()){
+        	revFile.add(fileScanner.nextLine()); 
         }
             
         for(int i = revFile.size()-1; i >=0; i--){
@@ -23,16 +21,18 @@ public class Reversal {
         	for(int j = wordtemp.length-1; j >=0; j--){
         		if(j>0){
         			System.out.print(wordtemp[j] + " ");
+        			pw.print(wordtemp[j] + " ");
         		} else {
         			System.out.print(wordtemp[j]);
+        			pw.print(wordtemp[j]);
         		}
         	}
-
         	System.out.println(" ");
-        	wordtemp=null;
+        	pw.println(" ");
+        	wordtemp = null;
         }
-             
-        file_name.close();
-        input.close();
+
+		fileScanner.close();
+		pw.close();
 	}
 }
