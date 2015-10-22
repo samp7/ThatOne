@@ -1,83 +1,44 @@
 import static org.junit.Assert.*;
 import java.io.*;
 import org.junit.*;
+import java.io.File;
+import java.util.Scanner;
 
 public class ReversalTest {
 	
 	private final String EOL = System.getProperty("line.separator");
 	
-	private static PrintStream console;
-	private static InputStream keyboard;
-	private static ByteArrayOutputStream out;
-	
-	@BeforeClass
-	public static void beforeTestsBegin(){
-		console = System.out;
-		out = new ByteArrayOutputStream();
-		System.setOut(new PrintStream(out));
-		keyboard = System.in;
+	@Test
+	public void test01() throws IOException{
+		File input = File.createTempFile("joke", ".txt");
+		BufferedWriter bw = new BufferedWriter(new FileWriter(input));
+		bw.write("Knock Knock" + EOL + 
+				"Who is there?" + EOL + 
+				"Doctor" + EOL + 
+				"Doctor who?" + EOL + 
+				"(Buh-Dum tss)" + EOL);
+		bw.close();
+		
+		File output = File.createTempFile("output", ".txt");
+		Reversal.reverseFile(input, output);
+		
+		String expected = "tss) (Buh-Dum " + EOL +
+						  "who? Doctor " + EOL +
+						  "Doctor " + EOL +
+						  "there? is Who " + EOL +
+						  "Knock Knock " + EOL;
+		
+		Scanner fileScanner = new Scanner(output);
+		String actual = new String();
+		while (fileScanner.hasNextLine()){
+        	actual += fileScanner.nextLine() + EOL; 
+        }
+		fileScanner.close();	
+		assertEquals("Didn't work.", expected, actual);
 	}
-	
-	@AfterClass
-	public static void afterTestsEnd() {
-		System.setOut(console);
-		System.setIn(keyboard);
-	}
-	
-	@After
-	public void afterEachTest() {
-		out.reset();
-	}
-	private void setInput(String anInput){
-		ByteArrayInputStream in = new ByteArrayInputStream(anInput.getBytes());
-		System.setIn(in);
-	}
-	private String getOutput(){
-		return out.toString();
-	}
-	
-	
-	
-	@Test (expected = java.io.FileNotFoundException.class)
-	public void ExceptionTest(){
-		String input = "";
-		setInput(input);
-	}
-	
 	
 	@Test
-	public void test01(){
-		String input = "test";
-		setInput(input);
-		
-		Reversal.main(null);
-		
-		String expected = "Bob. am I" + EOL +
-						  "you? are how Hello,";
-		String actual = getOutput();
-		assertEquals("incorrect result", expected, actual);
+	public void Test02(){
+		new Reversal();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-/*	
-	@Test
-	public void test() {
-		String openfile = "test";
-		Reversal.main();
-		String expected = "Bob. am I" + EOL + 
-						  "you? are how Hello,";
-		String actual = getOutput();
-		assertEquals("This isn't right.", expected, actual);
-	}
-*/
-	
 }
